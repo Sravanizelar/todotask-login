@@ -2,59 +2,57 @@ Fallowing are steps forl ogin service in Todoapp.
 
 #apt update
 
-#mkdir go
+#useradd -m -s /bin/bash app
 
-#cd go/
+#cd /home/app
 
-#mkdir src
+#wget -c https://dl.google.com/go/go1.14.2.linux-amd64.tar.gz -O - | sudo tar -xz -C /usr/local
 
-#cd src/
-
-#curl -O https://stroage.googleapis.com/golang/go1.13.5.linux-amd64.tar.gz
-
-#tar -xvf go1.13.5.linux-amd64.tar.gz
-
-#sudo mv go /usr/local
-
-#export GOPATH=$HOME/WORK
-
-#export PATH=$PATH:/usr/local/go/bin:$GOPATH/bin
+#export PATH=$PATH:/usr/local/go/bin
 
 #source ~/.profile
 
 #go version
 
-git clone https://github.com/zelar-soft-todoapp/login.git
+#mkdir ~/go
+
+#mkdir -p ~/go/src
+
+#cd  ~/go/src/
+
+#git clone https://github.com/zelar-soft-todoapp/login.git
 
 #cd login/
 
-#vi /etc/systemd/system/login.service
+#apt update
+
+#apt install go-dep
+
+#go get
 
 #go build
 
-#go get github.com/dgrijalva/jwt-go
-
-#go get github.com/labstack/echo
-
-#go get github.com/labstack/echo/middleware
-
-#go get github.com/labstack/gommon/log
-
-#go get github.com/openzipkin/zipkin-go
-
-#go get github.com/openzipkin/zipkin-go/middleware/http
-
-#go get github.com/openzipkin/zipkin-go/reporter/http
-
-#go build main.go user.go tracing.go
-
-#go build
+#vim /etc/systemd/system/login.service
 
 #systemctl daemon-reload
 
-#systemctl start login
+#systemctl start login.service
 
-#systemctl enable login
+#systemctl enable login.service
+   
+#systemctl status login.service
+   
+   -----------------systemd files === login.service files-------------------
+   
+[Unit]
+Description = login Service
 
-#systemctl status login
+[Service]
+user=root
+Environment=AUTH_API_PORT=8080
+Environment=USERS_API_ADDRESS=http://172.31.90.28:8080
+ExecStart=/root/go/src/login/login
+SyslogIdentifier=login
 
+[Install]
+WantedBy=multi-user.target
